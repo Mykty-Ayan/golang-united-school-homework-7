@@ -2,6 +2,7 @@ package coverage
 
 import (
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
 	"time"
@@ -32,7 +33,7 @@ func TestPeople_Len(t *testing.T) {
 
 	people = append(people, p1)
 
-	if len(people) != 1 {
+	if people.Len() != 1 {
 		fmt.Println(people)
 		t.Errorf(lenOneErrorString, len(people))
 	}
@@ -44,15 +45,74 @@ func TestPeople_Len(t *testing.T) {
 
 	people = append(people, p2)
 
-	if len(people) != 2 {
+	if people.Len() != 2 {
 		fmt.Println(people)
 		t.Errorf("enexpected lenght is 2, but received %d", len(people))
 	}
 
-	people = people[:len(people)-1]
+	people = people[:people.Len()-1]
 
-	if len(people) != 1 {
+	if people.Len() != 1 {
 		fmt.Println(people)
-		t.Errorf(lenOneErrorString, len(people))
+		t.Errorf(lenOneErrorString, people.Len())
 	}
+}
+
+func TestPeople_Less(t *testing.T) {
+
+	people := People{
+		Person{
+			firstName: "Ayan",
+			lastName:  "Akkassov",
+			birthDay:  time.Date(2000, time.Month(2), 1, 4, 30, 30, 0, time.UTC),
+		},
+		Person{
+			firstName: "John",
+			lastName:  "Larry",
+			birthDay:  time.Date(2000, time.Month(2), 1, 4, 30, 30, 0, time.UTC),
+		},
+		Person{
+			firstName: "John",
+			lastName:  "Barry",
+			birthDay:  time.Date(2000, time.Month(2), 1, 4, 30, 30, 0, time.UTC),
+		},
+		Person{
+			firstName: "Jane",
+			lastName:  "Barry",
+			birthDay:  time.Date(2000, time.Month(2), 2, 4, 30, 30, 0, time.UTC),
+		},
+	}
+
+	tData := []struct {
+		i        int
+		j        int
+		Expected bool
+	}{
+		{
+			i:        0,
+			j:        1,
+			Expected: true,
+		},
+		{
+			i:        1,
+			j:        2,
+			Expected: false,
+		},
+		{
+			i:        1,
+			j:        1,
+			Expected: false,
+		},
+		{
+			i:        2,
+			j:        3,
+			Expected: false,
+		},
+	}
+
+	for _, tc := range tData {
+		got := people.Less(tc.i, tc.j)
+		assert.Equal(t, tc.Expected, got, "Less with %s, %s expected %t, but got %t", people[tc.i], people[tc.j], tc.Expected, got)
+	}
+
 }

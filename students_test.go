@@ -114,5 +114,59 @@ func TestPeople_Less(t *testing.T) {
 		got := people.Less(tc.i, tc.j)
 		assert.Equal(t, tc.Expected, got, "Less with %s, %s expected %t, but got %t", people[tc.i], people[tc.j], tc.Expected, got)
 	}
+}
 
+func TestPeople_Swap(t *testing.T) {
+	p1 := Person{
+		firstName: "Ayan",
+		lastName:  "Akkassov",
+		birthDay:  time.Date(2000, time.Month(2), 1, 4, 30, 30, 0, time.UTC),
+	}
+	p2 := Person{
+		firstName: "John",
+		lastName:  "Larry",
+		birthDay:  time.Date(2000, time.Month(2), 1, 4, 30, 30, 0, time.UTC),
+	}
+	p3 := Person{
+		firstName: "John",
+		lastName:  "Barry",
+		birthDay:  time.Date(2000, time.Month(2), 1, 4, 30, 30, 0, time.UTC),
+	}
+	people := People{
+		p1,
+		p2,
+		p3,
+	}
+
+	tData := []struct {
+		i        int
+		j        int
+		swapped  Person
+		Expected bool
+	}{
+		{
+			i:        0,
+			j:        1,
+			swapped:  p1,
+			Expected: true,
+		},
+		{
+			i:        1,
+			j:        2,
+			swapped:  p2,
+			Expected: false,
+		},
+		{
+			i:        1,
+			j:        1,
+			swapped:  p2,
+			Expected: false,
+		},
+	}
+
+	for _, tc := range tData {
+		people.Swap(tc.i, tc.j)
+		actual := people[tc.j] == tc.swapped
+		assert.Equal(t, tc.Expected, actual, "Swap is not working")
+	}
 }

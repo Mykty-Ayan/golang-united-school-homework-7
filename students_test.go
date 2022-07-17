@@ -1,9 +1,11 @@
 package coverage
 
 import (
+	"errors"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"os"
+	"strconv"
 	"testing"
 	"time"
 )
@@ -169,4 +171,30 @@ func TestPeople_Swap(t *testing.T) {
 		actual := people[tc.j] == tc.swapped
 		assert.Equal(t, tc.Expected, actual, "Swap is not working")
 	}
+}
+
+func TestNewMatrix(t *testing.T) {
+	t.Run("right matrix", func(t *testing.T) {
+		expected := &Matrix{3, 3, []int{1, 0, 1, 1, 0, 1, 1, 0, 1}}
+		var expectedErr error = nil
+		actual, actualErr := New("1 0 1\n1 0 1\n1 0 1")
+		assert.Equal(t, expected, actual)
+		assert.Equal(t, expectedErr, actualErr)
+	})
+	t.Run("one col greater", func(t *testing.T) {
+		input := "1 1 1\n 1 1 1 1\n 1 1 1"
+		expected := (*Matrix)(nil)
+		expectedError := errors.New("Rows need to be the same length")
+		actual, actualErr := New(input)
+		assert.Equal(t, expected, actual)
+		assert.Equal(t, expectedError, actualErr)
+	})
+	t.Run("with one char", func(t *testing.T) {
+		input := "1 1 1\n1 O 1\n 1 1 1"
+		expected := (*Matrix)(nil)
+		expectedErr := &strconv.NumError{}
+		actual, actualErr := New(input)
+		assert.Equal(t, expected, actual)
+		assert.IsType(t, expectedErr, actualErr)
+	})
 }

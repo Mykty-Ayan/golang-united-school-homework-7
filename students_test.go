@@ -244,3 +244,33 @@ func TestMatrix_Cols(t *testing.T) {
 		assert.Equal(t, expected, actual)
 	})
 }
+
+func TestMatrix_Set(t *testing.T) {
+	t.Run("Set for 3 by 3 matrix", func(t *testing.T) {
+		input := "1 1 1\n 1 1 1\n 1 1 1"
+		matrix, err := New(input)
+		if err != nil {
+			t.Errorf("error should be nil: got %s", err)
+		}
+		actual := matrix.Set(0, 1, 0)
+		assert.Equal(t, true, actual)
+	})
+	t.Run("Set improper row for 3 by 3 matrix", func(t *testing.T) {
+		input := "1 1 1\n 1 1 1\n 1 1 1"
+		matrix, err := New(input)
+		if err != nil {
+			t.Errorf("error should be nil: got %s", err)
+		}
+		actual := matrix.Set(-1, 1, 0)
+		assert.Equal(t, false, actual)
+	})
+	t.Run("Set improper col for 3 by 3 matrix", func(t *testing.T) {
+		input := "1 1 1\n 1 1 1\n 1 1 1"
+		matrix, err := New(input)
+		if err != nil {
+			t.Errorf("error should be nil: got %s", err)
+		}
+		actual := matrix.Set(0, 10, 0)
+		assert.Equal(t, false, actual)
+	})
+}

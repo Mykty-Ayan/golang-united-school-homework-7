@@ -211,13 +211,36 @@ func TestMatrix_Rows(t *testing.T) {
 		assert.Equal(t, expected, actual)
 	})
 	t.Run("4 by 4 matrix", func(t *testing.T) {
-		input := "1 0 0 1\n 1 0 0 1\n 1 0 0 1"
-		expected := [][]int{{1, 0, 0, 1}, {1, 0, 0, 1}, {1, 0, 0, 1}}
+		input := "1 0 0 1\n 1 0 0 1\n 1 0 0 1\n1 0 0 1"
+		expected := [][]int{{1, 0, 0, 1}, {1, 0, 0, 1}, {1, 0, 0, 1}, {1, 0, 0, 1}}
 		matrix, err := New(input)
 		if err != nil {
 			t.Errorf("error should be nil: got %s", err)
 		}
 		actual := matrix.Rows()
+		assert.Equal(t, expected, actual)
+	})
+}
+
+func TestMatrix_Cols(t *testing.T) {
+	t.Run("3 by 3 matrix", func(t *testing.T) {
+		input := "1 1 1\n 1 1 1\n 1 1 1"
+		expected := [][]int{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}}
+		matrix, err := New(input)
+		if err != nil {
+			t.Errorf("error should be nil: got %s", err)
+		}
+		actual := matrix.Cols()
+		assert.Equal(t, expected, actual)
+	})
+	t.Run("4 by 4 matrix", func(t *testing.T) {
+		input := "1 0 0 1\n 1 0 0 1\n 1 0 0 1\n 1 0 0 1"
+		expected := [][]int{{1, 1, 1, 1}, {0, 0, 0, 0}, {0, 0, 0, 0}, {1, 1, 1, 1}}
+		matrix, err := New(input)
+		if err != nil {
+			t.Errorf("error should be nil: got %s", err)
+		}
+		actual := matrix.Cols()
 		assert.Equal(t, expected, actual)
 	})
 }
